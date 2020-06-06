@@ -7,8 +7,8 @@ app.use((ctx: Context, next: Function) => {
 })
 app.use(async (ctx: Context, next: Function) => {
   console.log(ctx.method, ctx.path, ctx.params);
-  ctx.request.respond({ body: 'hello deno!' });
-
+  console.log(await ctx.body());
+  ctx.response.body = 'hello deno!';
   await next();
 })
 app.listen({ port: 8000 })

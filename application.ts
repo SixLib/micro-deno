@@ -12,15 +12,16 @@ export class Application {
       });
       const mw = compose(this.middlewares!);
       mw(ctx);
-    }
-  }
+      req.respond({ body: 'hello deno!' });
+    };
+  };
 
   listen(opts: HTTPOptions): void {
     this.server = serve(opts);
-    console.log(`http://localhost:${opts.port}`)
+    console.log(`http://localhost:${opts.port}`);
     this.#running();
-  }
+  };
   use(fn: Function): void {
     this.middlewares = [...this.middlewares, fn]
-  }
+  };
 }
