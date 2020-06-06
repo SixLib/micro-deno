@@ -8,15 +8,19 @@ export class Application {
   #running = async () => {
     for await (const req of this.server!) {
       const ctx = new Context({
-        req
+        req,
       });
-      const mw = compose(this.middlewares!);
+      ctx.body = await ctx.getBody();
+      const mw = compose(this.middlewares);
       mw(ctx);
-      req.respond({ body: 'hello deno!' });
     };
   };
 
   listen(opts: HTTPOptions): void {
+    this.middlewares = [...this.middlewares, (ctx: Context, next: Function) => {
+      next();
+      ctx.request.respond(ctx.response);
+    }]
     this.server = serve(opts);
     console.log(`http://localhost:${opts.port}`);
     this.#running();
