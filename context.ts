@@ -1,18 +1,22 @@
-import { ServerRequest, Response, decode,MultipartReader } from "./deps.ts";
+import { ServerRequest, Response, decode, MultipartReader } from "./deps.ts";
 export class Context {
   request!: ServerRequest;
   url!: URL;
   response: Response = {};
-  body:any=null;
-  get method() { return this.request.method };
-  get path() { return this.url.pathname };
+  body: any = null;
+  get method() {
+    return this.request.method;
+  }
+  get path() {
+    return this.url.pathname;
+  }
   get params() {
     const params: Record<string, string> = {};
     for (const [k, v] of this.url.searchParams) {
       params[k] = v;
-    };
+    }
     return params;
-  };
+  }
   // async body() {
   //   const contentType = this.request.headers.get('Content-Type');
   //   if (contentType?.includes('application/json')) {
@@ -20,7 +24,7 @@ export class Context {
   //     return JSON.parse(decode(await Deno.readAll(this.request.body)));
   //   } else if (contentType?.includes('application/x-www-form-urlencoded')) {
   //     let data: Record<string, unknown> = {};
-  //     const unit8Array = await Deno.readAll(this.request.body);      
+  //     const unit8Array = await Deno.readAll(this.request.body);
   //     for (
   //       const [k, v] of new URLSearchParams(
   //         decode(await Deno.readAll(this.request.body)),
@@ -33,13 +37,13 @@ export class Context {
   //   return decode(await Deno.readAll(this.request.body));
   // }
   async getBody<T extends unknown>(): Promise<T> {
-    const contentType = this.request.headers.get('Content-Type');
+    const contentType = this.request.headers.get("Content-Type");
     walk: {
       let data: Record<string, unknown> = {};
       if (contentType) {
-        if (contentType.includes('application/json')) {
+        if (contentType.includes("application/json")) {
           data = JSON.parse(decode(await Deno.readAll(this.request.body)));
-        } else if (contentType.includes('application/x-www-form-urlencoded')) {
+        } else if (contentType.includes("application/x-www-form-urlencoded")) {
           for (
             const [k, v] of new URLSearchParams(
               decode(await Deno.readAll(this.request.body)),
@@ -47,7 +51,7 @@ export class Context {
           ) {
             data[k] = v;
           }
-        } else if (contentType.includes('multipart/form-data')) {
+        } else if (contentType.includes("multipart/form-data")) {
           const match = contentType.match(/boundary=([^\s]+)/);
           const boundary = match ? match[1] : undefined;
           if (boundary) {
@@ -71,6 +75,6 @@ export class Context {
   }
   constructor(opts: { req: ServerRequest }) {
     this.request = opts.req;
-    this.url = new URL(this.request.url, 'http://0.0.0.0');
-  };
-};
+    this.url = new URL(this.request.url, "http://0.0.0.0");
+  }
+}

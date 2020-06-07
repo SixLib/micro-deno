@@ -13,19 +13,19 @@ export class Application {
       ctx.body = await ctx.getBody();
       const mw = compose(this.middlewares);
       mw(ctx);
-    };
+    }
   };
 
   listen(opts: HTTPOptions): void {
     this.middlewares = [...this.middlewares, (ctx: Context, next: Function) => {
       next();
       ctx.request.respond(ctx.response);
-    }]
+    }];
     this.server = serve(opts);
-    console.log(`http://localhost:${opts.port}`);
+    console.log(`http://${opts.hostname || "localhost"}:${opts.port}`);
     this.#running();
-  };
+  }
   use(fn: Function): void {
-    this.middlewares = [...this.middlewares, fn]
-  };
+    this.middlewares = [...this.middlewares, fn];
+  }
 }
