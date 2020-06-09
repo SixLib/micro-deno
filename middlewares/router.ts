@@ -2,7 +2,7 @@ import { pathtoRegexp } from "../utils/path-to-regexp.ts";
 import { Context } from "../context.ts";
 type Methods = "GET" | "POST" | "PUT" | "DELETE";
 export class Router {
-  params: Record<string,unknown> = {};
+  params: Record<string, unknown> = {};
   stack: Array<{ Method: Methods; Path: string; CallBack: Function }> = [];
   add(method: Methods, path: string, cb: Function) {
     this.stack = [
@@ -18,9 +18,9 @@ export class Router {
         const re = pathtoRegexp(routes[i].Path, keys);
         const regRes = re.exec(ctx.path);
         if (regRes) {
-           keys.map((m, i) => {
+          keys.map((m, i) => {
             this.params[m.name] = regRes[i + 1];
-          })
+          });
           routes[i].CallBack(ctx, next);
           return;
         }
