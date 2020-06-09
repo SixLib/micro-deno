@@ -2,7 +2,7 @@ import { ServerRequest, Response, decode, MultipartReader } from "./deps.ts";
 export class Context {
   request!: ServerRequest;
   url!: URL;
-  response: Response = {};
+  response: Response & { headers: Headers } = { headers: new Headers() };
   body: any = null;
   get method() {
     return this.request.method;
@@ -16,6 +16,9 @@ export class Context {
       params[k] = v;
     }
     return params;
+  }
+  setHeader(key: string, val: string) {
+    this.response.headers.set(key, val);
   }
   // async body() {
   //   const contentType = this.request.headers.get('Content-Type');

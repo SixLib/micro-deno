@@ -3,20 +3,26 @@ import { Router } from "../middlewares/router.ts";
 const app = new Application();
 const router = new Router();
 
-router.add("GET", "/getitem/:we", async (ctx: Context, next: Function) => {
+router.add("GET", "/items", async (ctx: Context, next: Function) => {
   ctx.response.body = JSON.stringify(ctx.body);
   await next();
 });
-router.add("GET", "/getitem/:id", async (ctx: Context, next: Function) => {
+router.add("POST", "/getitem/:id", async (ctx: Context, next: Function) => {
   ctx.response.body = JSON.stringify(ctx.body);
   await next();
 });
 
 app.use((ctx: Context, next: Function) => {
-  console.log("中间件");
+  ctx.setHeader("Access-Control-Allow-Origin", "*");
+  ctx.setHeader("Access-Control-Allow-Credentials", "true");
+  ctx.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Connection, User-Agent, Cookie",
+  );
   next();
 });
 app.use(router.routes());
+
 // app.use(async (ctx: Context, next: Function) => {
 //   console.log(ctx.method, ctx.path, ctx.params, ctx.body);
 
