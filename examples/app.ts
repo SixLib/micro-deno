@@ -1,5 +1,5 @@
-import { Application, Context } from "../mod.ts";
-import { Router } from "../middlewares/router.ts";
+import { Application, Context, Router, cors } from "../mod.ts";
+
 const app = new Application();
 const router = new Router();
 
@@ -13,15 +13,7 @@ router.add("POST", "/getitem/:id", async (ctx: Context, next: Function) => {
   await next();
 });
 
-app.use((ctx: Context, next: Function) => {
-  ctx.setHeader("Access-Control-Allow-Origin", "*");
-  ctx.setHeader("Access-Control-Allow-Credentials", "true");
-  ctx.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Connection, User-Agent, Cookie",
-  );
-  next();
-});
+app.use(cors());
 app.use(router.routes());
 
 // app.use(async (ctx: Context, next: Function) => {
