@@ -3,8 +3,9 @@ import { Router } from "../middlewares/router.ts";
 const app = new Application();
 const router = new Router();
 
-router.add("GET", "/items", async (ctx: Context, next: Function) => {
-  ctx.response.body = JSON.stringify(ctx.body);
+router.add("GET", "/items/:id", async (ctx: Context, next: Function) => {
+  console.log(router.params);
+  ctx.response.body = "items";
   await next();
 });
 router.add("POST", "/getitem/:id", async (ctx: Context, next: Function) => {
