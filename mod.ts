@@ -1,6 +1,9 @@
-export * from "./application.ts";
-export * from "./context.ts";
-export * from "https://deno.land/std/http/mod.ts";
-
-export * from "./middlewares/router.ts";
-export * from "./middlewares/cors.ts";
+import { ServerRequest } from "./deps.ts";
+import Micro from "./application.ts";
+const app = new Micro();
+app.use((req: ServerRequest) => {
+  req.respond({ body: 'hello world!!!' })
+})
+app.listen({ port: 8000 }, () => {
+  console.log(`http://localhost:8000`)
+})
